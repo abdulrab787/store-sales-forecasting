@@ -131,12 +131,19 @@ def run_advanced_models():
     X_train, y_train = prepare_xy(train_df)
     X_val, y_val = prepare_xy(val_df)
 
+    # Save training feature list for inference
+    feature_list_path = os.path.join(MODEL_DIR, "train_features.pkl")
+    joblib.dump(X_train.columns.tolist(), feature_list_path)
+    print(f"📌 Saved training feature list to: {feature_list_path}")
+
+    # Train models
     xgb_rmse = train_xgboost(X_train, y_train, X_val, y_val)
     lgb_rmse = train_lightgbm(X_train, y_train, X_val, y_val)
 
     print("\n✅ FINAL RESULTS")
     print(f"XGBoost RMSE: {xgb_rmse:.6f}")
     print(f"LightGBM RMSE: {lgb_rmse:.6f}")
+
 
 if __name__ == "__main__":
     run_advanced_models()
